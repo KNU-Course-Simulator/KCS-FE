@@ -1,3 +1,4 @@
+// src/components/Tab/Tab.tsx
 import React from "react";
 
 type TabProps = {
@@ -9,11 +10,15 @@ type TabProps = {
 export const Tab: React.FC<TabProps> = ({ isActive, onClick, children }) => (
   <button
     onClick={onClick}
-    className={`py-2 px-4 font-medium border-b-2 ${
-      isActive
-        ? "border-red-700 text-red-700"
-        : "border-transparent text-gray-600 hover:text-gray-800"
-    }`}
+    className={`
+      relative
+      py-2 px-4 font-medium
+      ${
+        isActive
+          ? "text-red-600 bg-white border border-gray-400 border-b-0 -mb-px rounded-t-md"
+          : "bg-gray-200 text-gray-600 rounded-t-md border font-semilight border-transparent hover:text-gray-800"
+      }
+    `}
   >
     {children}
   </button>
