@@ -11,6 +11,8 @@ export interface RegistrationItem {
   category: string; // 현재 선택된 교과구분
   credits: number;
   time: string;
+  limit: number;
+  enrolled: number;
 }
 
 interface RegistrationListProps {

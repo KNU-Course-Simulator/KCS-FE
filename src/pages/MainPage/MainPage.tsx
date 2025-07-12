@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 import { Header } from "./Header";
 import { UserInfo } from "./UserInfo";
 import { SearchForm } from "./SearchForm";
+import { SearchResults } from "./SearchResults";
 import { ResultTabs } from "./ResultTabs";
 import { PackageList } from "./PackageList";
 import { RegistrationList } from "./RegistrationList";
 import type { RegistrationItem } from "./RegistrationList";
+import type { SearchResultItem } from "./SearchResults";
 import { Footer } from "./Footer";
 
 // 타입 정의 (필요 시 별도 파일로 분리)
@@ -49,36 +51,14 @@ const dummyPackage: PackageItem[] = [
     limit: 70,
     enrolled: 0,
   },
-  {
-    code: "CLTR0657",
-    name: "생활배드민턴",
-    section: "003",
-    category: "교양",
-    credits: 1,
-    time: "화 13:00~14:00, 화 14:00~15:00",
-    limit: 30,
-    enrolled: 1,
-  },
-  {
-    code: "ELEC0243",
-    name: "회로이론1",
-    section: "007",
-    category: "전공",
-    credits: 3,
-    time: "화 10:30~12:00, 목 13:30~15:00",
-    limit: 70,
-    enrolled: 0,
-  },
 ];
 
 const MainPage: React.FC = () => {
   const [nickname, setNickname] = useState("");
-  const [tab, setTab] = useState<"package" | "results">("package");
+  const [tab, setTab] = useState<"search" | "package">("search");
   const [courseCode, setCourseCode] = useState("");
   const [captcha, setCaptcha] = useState("");
-  const [captchaImage, setCaptchaImage] = useState("/assets/1.png");
-  const [searchResults, setSearchResults] = useState<Course[]>([]);
-
+  const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
   const [registrationList, setRegistrationList] = useState<RegistrationItem[]>(
     []
   );
@@ -88,38 +68,65 @@ const MainPage: React.FC = () => {
     setNickname(nick);
   }, []);
 
-  const refreshCaptcha = () => setCaptchaImage(`/api/captcha?${Date.now()}`);
+  const dummyCourses: SearchResultItem[] = [
+    {
+      code: "COMP217006",
+      name: "컴퓨터프로그래밍",
+      section: "001",
+      category: "전공필수",
+      credits: 3,
+      time: "월 10:00~12:00",
+      limit: 60,
+      enrolled: 45,
+    },
+    // 추가 과목이 필요하면 여기에…
+  ];
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: 백엔드 API 호출
-    setSearchResults([
-      {
-        code: courseCode,
-        name: "예시강의명",
-        credits: 3,
-        time: "월 10:00~12:00",
-      },
-    ]);
-    setTab("results");
-  };
-
-  const handleRemove = (code: string) => {
-    setRegistrationList((list) => list.filter((item) => item.code !== code));
-  };
-
-  const handleCategoryChange = (code: string, newCat: string) => {
-    setRegistrationList((list) =>
-      list.map((item) =>
-        item.code === code ? { ...item, category: newCat } : item
-      )
+  const handleSearch = () => {
+    const results = dummyCourses.filter(
+      (c) => c.code === courseCode.toUpperCase()
     );
+    if (results.length === 0) {
+      alert("검색 결과가 없습니다.");
+    }
+    setSearchResults(results);
+    setTab("search");
   };
+
+  const handleApply = (item: SearchResultItem) => {
+    // 중복 방지
+    if (!registrationList.some((r) => r.code === item.code)) {
+      const reg: RegistrationItem = {
+        code: item.code,
+        name: item.name,
+        section: item.section,
+        category: item.category,
+        credits: item.credits,
+        time: item.time,
+        limit: item.limit,
+        enrolled: item.enrolled,
+      };
+      setRegistrationList((prev) => [...prev, reg]);
+    }
+    // 탭 자동 전환
+    setTab("package");
+  };
+
+  const handleRemove = (code: string) =>
+    setRegistrationList((prev) => prev.filter((r) => r.code !== code));
+
+  // 교과구분 변경
+  const handleCategoryChange = (code: string, cat: string) =>
+    setRegistrationList((prev) =>
+      prev.map((r) => (r.code === code ? { ...r, category: cat } : r))
+    );
 
   return (
     <div className="min-h-screen">
       <Header nickname={nickname} subTitle="아님" />
-      <div className="container mx-auto">
+
+      <div className="container mx-auto px-4">
+        {/* 사용자 정보 */}
         <UserInfo
           studentNo="202123456"
           name={nickname}
@@ -127,33 +134,37 @@ const MainPage: React.FC = () => {
           availableCredits={23}
           appliedCredits={9}
         />
+
+        {/* 검색 폼 */}
         <SearchForm
           courseCode={courseCode}
           captcha={captcha}
-          captchaImage={captchaImage}
           onCourseChange={setCourseCode}
           onCaptchaChange={setCaptcha}
-          onRefreshCaptcha={refreshCaptcha}
-          onSubmit={handleSearch}
+          onSubmit={() => {}}
+          onSearch={handleSearch}
         />
+
+        {/* 탭 */}
         <ResultTabs current={tab} onChange={setTab} />
-        {tab === "results" ? (
-          searchResults.length > 0 && (
-            <div className="bg-white p-6 rounded-lg shadow mt-4">
-              <h2 className="mb-4 text-gray-700">
-                검색 결과 {searchResults.length}건
-              </h2>
-              {/* 결과 테이블 구현 */}
-            </div>
-          )
+
+        {/* 검색 또는 패키지 내용 */}
+        {tab === "search" ? (
+          <SearchResults results={searchResults} onApply={handleApply} />
         ) : (
           <PackageList items={dummyPackage} />
         )}
-        <RegistrationList
-          items={registrationList}
-          onRemove={handleRemove}
-          onCategoryChange={handleCategoryChange}
-        />
+
+        {/* 수강신청목록 (항상 표시) */}
+        <div className="mt-6">
+          <RegistrationList
+            items={registrationList}
+            onRemove={handleRemove}
+            onCategoryChange={handleCategoryChange}
+          />
+        </div>
+
+        {/* 푸터 */}
         <Footer />
       </div>
     </div>

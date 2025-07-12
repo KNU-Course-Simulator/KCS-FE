@@ -21,7 +21,7 @@ export const Footer: React.FC = () => (
     <p className="mt-1 text-gray-500 text-sm">
       소스 코드를 둘러보고 싶으신 분은
       <a
-        href="https://github.com/not-pnu/sugang"
+        href="https://github.com/KNU-Course-Simulator/KCS-FE.git"
         target="_blank"
         rel="noopener noreferrer"
         className="text-blue-300 underline hover:text-blue-500"
