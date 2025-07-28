@@ -22,7 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
         <img
           src="/assets/logo_cut.png"
           alt="Header"
-          className="w-12 object-cover"
+          className="w-12 object-cover filter brightness-0"
         />
         <h1 className="font-bold ml-3 text-xl text-gray-600">
           {universityName}

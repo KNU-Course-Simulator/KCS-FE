@@ -15,7 +15,7 @@ export const ResultTabs: React.FC<ResultTabsProps> = ({
       과목 검색
     </Tab>
     <Tab isActive={current === "package"} onClick={() => onChange("package")}>
-      꾸러미 신청목록
+      담은 과목 목록
     </Tab>
   </div>
 );

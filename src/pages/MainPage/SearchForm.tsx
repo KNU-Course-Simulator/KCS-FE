@@ -71,12 +71,8 @@ export const SearchForm: React.FC<SearchFormProps> = ({
             <tbody>
               <tr className="items-center">
                 {/* 강좌번호 */}
-                <td className="w-1/12 bg-gray-100 text-red-600 font-medium text-center">
-                  <span className="text-sm">
-                    강좌번호
-                    <br />
-                    (11자리) *
-                  </span>
+                <td className="w-1/12 bg-gray-100 font-medium text-center">
+                  <span className="text-sm">강좌번호</span>
                 </td>
                 <td className="pl-2 pr-2 py-3 w-2/12">
                   <input
@@ -90,11 +86,9 @@ export const SearchForm: React.FC<SearchFormProps> = ({
                 </td>
 
                 {/* 캡차 표시 */}
-                <td className="w-1/12 bg-gray-100 text-red-600 font-medium text-center">
+                <td className="w-1/12 bg-gray-100 font-medium text-center">
                   <span className="text-sm whitespace-nowrap">
                     자동입력방지문자
-                    <br />
-                    (텍스트 4자리) *
                   </span>
                 </td>
                 <td className="w-2/12 px-4 py-3">
@@ -119,7 +113,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({
                 </td>
 
                 {/* 문자 입력 + 버튼들 */}
-                <td className="w-1/12 bg-gray-100 text-red-600 font-medium text-center">
+                <td className="w-1/12 bg-gray-100 font-medium text-center">
                   <span className="text-sm">문자 입력 *</span>
                 </td>
                 <td className="w-full px-4 py-3">
@@ -161,7 +155,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({
           disabled={!isConfirmed}
           className="h-10 text-white px-4 rounded border border-gray-300"
         >
-          조회
+          확인
         </Button>
       </div>
     </div>

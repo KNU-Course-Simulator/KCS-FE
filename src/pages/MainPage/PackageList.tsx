@@ -20,7 +20,7 @@ interface PackageItem {
 export const PackageList: React.FC<PackageListProps> = ({ items }) => (
   <div className="bg-white rounded-lg mt-4">
     <p className="mb-1 text-gray-700 font-medium">
-      꾸러미 신청 목록 {items.length}건
+      담은 과목 신청 목록 {items.length}건
     </p>
     <Table
       headers={[

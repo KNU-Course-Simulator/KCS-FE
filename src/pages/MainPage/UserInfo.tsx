@@ -9,16 +9,12 @@ interface UserInfoProps {
 }
 
 export const UserInfo: React.FC<UserInfoProps> = ({
-  studentNo = "",
   name,
-  department = "",
   availableCredits = 0,
   appliedCredits = 0,
 }) => {
   const rows = [
-    { label: "학번", value: studentNo },
     { label: "성명", value: name },
-    { label: "소속", value: department },
     { label: "수강신청가능학점", value: String(availableCredits) },
     { label: "수강신청학점", value: String(appliedCredits) },
   ];
@@ -30,7 +26,7 @@ export const UserInfo: React.FC<UserInfoProps> = ({
           <tr>
             {rows.map(({ label, value }, i) => (
               <React.Fragment key={i}>
-                <td className="w-1/6 bg-gray-100 text-sm py-2 font-medium">
+                <td className="w-1/8 bg-gray-100 text-sm py-2 font-medium">
                   {label}
                 </td>
                 <td className="w-1/4 px-2 py-2 text-left font-light whitespace-nowrap">
